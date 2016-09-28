@@ -1,6 +1,7 @@
 package com.xlr8.jackson.doctrineoropinion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +40,10 @@ public class QuestionActivity extends AppCompatActivity {
 
     DatabaseReference mDatabase;
 
-    SharedPreferences prefs = QuestionActivity.this.getSharedPreferences("QuizData", Context.MODE_PRIVATE);
+
+
+    SharedPreferences prefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +60,8 @@ public class QuestionActivity extends AppCompatActivity {
         quote           = (TextView) findViewById(R.id.question_quote);
         doctrine_button.setOnClickListener(doctrine_choose);
         opinion_button.setOnClickListener(opinion_choose);
-//        for (int i = 0; i < availableQuestions.size(); i++)
-//            if (!completedQuestions.contains(availableQuestions.elementAt(i))) {
-//                quote.setText(allQuestions.get(availableQuestions.elementAt(i)).getQuote());
-//                currentQuestion = allQuestions.get(availableQuestions.elementAt(i));
-//                break;
-//            }
+
+        prefs = QuestionActivity.this.getSharedPreferences("QuizData", Context.MODE_PRIVATE);
     }
 
     ValueEventListener retrieveQuotes = new ValueEventListener() {
@@ -103,7 +105,7 @@ public class QuestionActivity extends AppCompatActivity {
                 if (quote.getText().equals("Loading..."))
                 {
                     quote.setText(R.string.NoQuestionsFound);
-                    Toast.makeText(QuestionActivity.this,R.string.NoQuestionsFound, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(QuestionActivity.this,R.string.NoQuestionsFound, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -117,53 +119,76 @@ public class QuestionActivity extends AppCompatActivity {
     View.OnClickListener doctrine_choose = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            completedQuestions.add(currentQuestion.getTitle());
-            quote.setText(R.string.Loading);
-            for (int i = 0; i < availableQuestions.size(); i++)
-                if (!completedQuestions.contains(availableQuestions.elementAt(i))) {
-                    quote.setText(allQuestions.get(availableQuestions.elementAt(i)).getQuote());
-                    currentQuestion = allQuestions.get(availableQuestions.elementAt(i));
-                    break;
-                }
-            if (quote.getText().equals("Loading..."))
+            if (quote.getText().equals("No further questions found"))
             {
-                quote.setText(R.string.NoQuestionsFound);
-                Toast.makeText(QuestionActivity.this,R.string.NoQuestionsFound, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(QuestionActivity.this, StartScreen.class));
+            } else {
+                if (currentQuestion.getIsDoctrine()) {
+                    scores.add("Correct");
+                    Toast.makeText(QuestionActivity.this, "Correct!", Toast.LENGTH_SHORT).show();
+                } else {
+                    scores.add("Incorrect");
+                    Toast.makeText(QuestionActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
+                }
+
+                completedQuestions.add(currentQuestion.getTitle());
+                quote.setText(R.string.Loading);
+                for (int i = 0; i < availableQuestions.size(); i++)
+                    if (!completedQuestions.contains(availableQuestions.elementAt(i))) {
+                        quote.setText(allQuestions.get(availableQuestions.elementAt(i)).getQuote());
+                        currentQuestion = allQuestions.get(availableQuestions.elementAt(i));
+                        break;
+                    }
+                if (quote.getText().equals("Loading...")) {
+                    quote.setText(R.string.NoQuestionsFound);
+                    //Toast.makeText(QuestionActivity.this,R.string.NoQuestionsFound, Toast.LENGTH_SHORT).show();
+                }
+
+                Gson gson = new Gson();
+                prefs.edit().putString("AvailableQuestions", gson.toJson(availableQuestions)).apply();
+                prefs.edit().putString("CompletedQuestions", gson.toJson(allQuestions)).apply();
+                prefs.edit().putString("AllQuestions", gson.toJson(scores)).apply();
+                prefs.edit().putString("CurrentQuestion", currentQuestion.toString()).apply();
+                prefs.edit().putString("Score", gson.toJson(scores)).apply();
             }
-
-            prefs.edit().putStringSet("AvailableQuestions", (Set<String>) availableQuestions).apply();
-            prefs.edit().putStringSet("CompletedQuestions", (Set<String>) completedQuestions).apply();
-            prefs.edit().putStringSet("AllQuestions",(Set<String>) allQuestions).apply();
-            prefs.edit().putString("CurrentQuestion",currentQuestion.toString()).apply();
-            prefs.edit().putStringSet("Score", (Set<String>) scores).apply();
-
         }
     };
 
     View.OnClickListener opinion_choose = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            completedQuestions.add(currentQuestion.getTitle());
-            quote.setText(R.string.Loading);
-            for (int i = 0; i < availableQuestions.size(); i++)
-                if (!completedQuestions.contains(availableQuestions.elementAt(i))) {
-                    quote.setText(allQuestions.get(availableQuestions.elementAt(i)).getQuote());
-                    currentQuestion = allQuestions.get(availableQuestions.elementAt(i));
-                    break;
-                }
-            if (quote.getText().equals("Loading..."))
+            if (quote.getText().equals("No further questions found"))
             {
-                quote.setText(R.string.NoQuestionsFound);
-                Toast.makeText(QuestionActivity.this,R.string.NoQuestionsFound, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(QuestionActivity.this, StartScreen.class));
+            } else {
+                if (!currentQuestion.getIsDoctrine()) {
+                    scores.add("Correct");
+                    Toast.makeText(QuestionActivity.this, "Correct!", Toast.LENGTH_SHORT).show();
+                } else {
+                    scores.add("Incorrect");
+                    Toast.makeText(QuestionActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
+                }
+
+                completedQuestions.add(currentQuestion.getTitle());
+                quote.setText(R.string.Loading);
+                for (int i = 0; i < availableQuestions.size(); i++)
+                    if (!completedQuestions.contains(availableQuestions.elementAt(i))) {
+                        quote.setText(allQuestions.get(availableQuestions.elementAt(i)).getQuote());
+                        currentQuestion = allQuestions.get(availableQuestions.elementAt(i));
+                        break;
+                    }
+                if (quote.getText().equals("Loading...")) {
+                    quote.setText(R.string.NoQuestionsFound);
+                    //Toast.makeText(QuestionActivity.this,R.string.NoQuestionsFound, Toast.LENGTH_SHORT).show();
+                }
+
+                Gson gson = new Gson();
+                prefs.edit().putString("AvailableQuestions", gson.toJson(availableQuestions)).apply();
+                prefs.edit().putString("CompletedQuestions", gson.toJson(allQuestions)).apply();
+                prefs.edit().putString("AllQuestions", gson.toJson(scores)).apply();
+                prefs.edit().putString("CurrentQuestion", currentQuestion.toString()).apply();
+                prefs.edit().putString("Score", gson.toJson(scores)).apply();
             }
-
-            prefs.edit().putStringSet("AvailableQuestions", (Set<String>) availableQuestions);
-            prefs.edit().putStringSet("CompletedQuestions", (Set<String>) completedQuestions);
-            prefs.edit().putStringSet("AllQuestions",(Set<String>) allQuestions);
-            prefs.edit().putString("CurrentQuestion",currentQuestion.toString());
-            prefs.edit().putStringSet("Score", (Set<String>) scores);
-
-            prefs.edit().apply();
         }
     };
 }

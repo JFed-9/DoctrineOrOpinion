@@ -13,21 +13,21 @@
     tools:context="com.xlr8.jackson.doctrineoropinion.StartScreen"
     tools:showIn="@layout/activity_start_screen">
 
-    <TextView
-        android:text="Doctrine or Opinion?"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/start_title"
-        android:textSize="30sp" />
-
     <Button
         android:text="Begin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/start_title"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/start_begin" />
+        android:id="@+id/start_begin"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Doctrine or Opinion?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_title"
+        android:textSize="30sp"
+        android:layout_above="@+id/start_begin"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
