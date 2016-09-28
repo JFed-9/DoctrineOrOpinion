@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "818808927678",
+    "firebase_url": "https://doctrine-or-opinion.firebaseio.com",
+    "project_id": "doctrine-or-opinion",
+    "storage_bucket": "doctrine-or-opinion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818808927678:android:9278aca8dfba3dd7",
+        "android_client_info": {
+          "package_name": "com.xlr8.jackson.doctrineoropinion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818808927678-vn02e2e3nkiil6rqcvonkhqjfffremt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiXcugqN9iY2OAkClIljzxx-qup_LymKA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
