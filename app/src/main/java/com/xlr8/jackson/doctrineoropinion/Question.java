@@ -8,17 +8,17 @@ import java.net.URL;
  */
 
 public class Question {
-    String quote,title;
-    Boolean isDoctrine;
+    String details,title;
+    Boolean isTrue;
     URL source;
-    double reason;
+    double explanation;
 
-    String defaultSource = "http://google,com";
+    private final String defaultSource = "http://google,com";
 
     Question(String t, String q, Boolean d, String s, double r) {
-        quote = q;
+        details = q;
         title = t;
-        isDoctrine = d;
+        isTrue = d;
         try {
             source = new URL(s);
         } catch (MalformedURLException e)
@@ -30,12 +30,12 @@ public class Question {
                 //Google didn't work either
             }
         }
-        reason = r;
+        explanation = r;
     }
     Question() {
-        quote = "Blank";
+        details = "Blank";
         title = "Blank";
-        isDoctrine = true;
+        isTrue = true;
         try {
             source = new URL("http://jacksonfeddock.com");
         } catch (MalformedURLException e)
@@ -47,38 +47,64 @@ public class Question {
                 //Google didn't work either
             }
         }
-        reason = 2.4;
+        explanation = 0.0;
     }
     Question(String rawData) {
-        String[] values = rawData.split("ß");
-        title = values[0];
-        quote = values[1];
-        isDoctrine = false;
-        if (values[2].equals("T"))
-            isDoctrine = true;
-        try {
-            source = new URL(values[3]);
-        } catch (MalformedURLException e)
+        int count = 0;
+        for (int i = 0; i < rawData.length(); i++)
         {
-            System.out.println("Failure in converting url: " + values[3]);
-            try {
-                source = new URL(defaultSource);
-            } catch (MalformedURLException f) {
-                //Google didn't work either
+            if (rawData.charAt(i) == 'ß')
+            {
+                count++;
             }
         }
-        reason = Double.parseDouble(values[4]);
+        if (count != 5)
+        {
+            details = "Blank";
+            title = "Blank";
+            isTrue = true;
+            try {
+                source = new URL("http://jacksonfeddock.com");
+            } catch (MalformedURLException e)
+            {
+                System.out.println("Failure in converting url: http://jacksonfeddock.com");
+                try {
+                    source = new URL(defaultSource);
+                } catch (MalformedURLException f) {
+                    //Google didn't work either
+                }
+            }
+            explanation = 0.0;
+        } else {
+            String[] values = rawData.split("ß");
+            title = values[0];
+            details = values[1];
+            isTrue = false;
+            if (values[2].equals("T"))
+                isTrue = true;
+            try {
+                source = new URL(values[3]);
+            } catch (MalformedURLException e) {
+                System.out.println("Failure in converting url: " + values[3]);
+                try {
+                    source = new URL(defaultSource);
+                } catch (MalformedURLException f) {
+                    //Google didn't work either
+                }
+            }
+            explanation = Double.parseDouble(values[4]);
+        }
     }
 
-    String getQuote() { return quote; }
+    String getDetails() { return details; }
     String getTitle() { return title; }
-    Boolean getIsDoctrine() { return isDoctrine; }
+    Boolean isTrue() { return isTrue; }
     URL getSource() { return source; }
-    double getReason() { return reason; }
+    double getExplanation() { return explanation; }
 
-    public void setQuote(String q) { quote = q; }
+    public void setDetails(String q) { details = q; }
     public void setTitle(String t) { title = t; }
-    public void setIsDoctrine(Boolean i) { isDoctrine = i; }
+    public void setTrue(Boolean i) { isTrue = i; }
     public void setSource(String s) {
         try {
             source = new URL(s);
@@ -92,16 +118,16 @@ public class Question {
             }
         }
     }
-    public void setReason(Double r) { reason = r; }
+    public void setExplanation(Double r) { explanation = r; }
 
     public String toString() {
-        String s = title + "ß" + quote + "ß";
-        if (isDoctrine)
+        String s = title + "ß" + details + "ß";
+        if (isTrue)
             s += "T";
         else
             s += "F";
         s += "ß";
-        s += source.toString() + "ß" + Double.toString(reason);
+        s += source.toString() + "ß" + Double.toString(explanation);
         return s;
     }
 }
