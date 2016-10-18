@@ -30,4 +30,12 @@
         android:layout_above="@+id/start_begin"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:text="Add Question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/start_add" />
+
 </RelativeLayout>

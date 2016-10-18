@@ -10,6 +10,8 @@ import android.widget.Button;
 
 public class StartScreen extends AppCompatActivity {
 
+    Button addButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +27,13 @@ public class StartScreen extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO Reset all questions and save data to User Preferences  
                 startActivity(new Intent(StartScreen.this, QuestionActivity.class));
+            }
+        });
+        addButton = (Button) findViewById(R.id.start_add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(StartScreen.this, AddQuestion.class));
             }
         });
     }

@@ -92,16 +92,10 @@ public class QuestionActivity extends AppCompatActivity {
 
             for (DataSnapshot snap : dataSnapshot.getChildren()) {
                 for (DataSnapshot QuestionSnap : snap.getChildren()) {
+                    Question addingQ = (Question)QuestionSnap.getValue(Question.class);
 
-                    // Get usable info from Data Snapshot
-                    String title = (String)QuestionSnap.child("Title").getValue();
-                    String quote = (String)QuestionSnap.child("Details").getValue();
-                    String source = (String)QuestionSnap.child("Source").getValue();
-                    Boolean doctrine = (Boolean)QuestionSnap.child("Truth").getValue();
-                    Double reason = (Double)QuestionSnap.child("Explanation").getValue();
-
-                    allQuestions.put(title, new Question(title,quote,doctrine,source,reason));
-                    availableQuestions.add(title);
+                    allQuestions.put(addingQ.getTitle(), addingQ);
+                    availableQuestions.add(addingQ.getTitle());
                 }
             }
 

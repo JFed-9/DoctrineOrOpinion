@@ -5,4 +5,5 @@
     <string name="NoQuestionsFound">No further questions found</string>
     <string name="Loading">Loading...</string>
     <string name="title_activity_results">ResultsActivity</string>
+    <string name="title_activity_add_question">AddQuestion</string>
 </resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_add_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.xlr8.jackson.doctrineoropinion.AddQuestion"
+    tools:showIn="@layout/activity_add_question">
+
+    <TextView
+        android:text="Add Question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/add_addlabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/add_addlabel"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/add_title"
+        android:hint="Title" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/add_title"
+        android:layout_alignRight="@+id/add_title"
+        android:layout_alignEnd="@+id/add_title"
+        android:id="@+id/add_details"
+        android:hint="Details" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/add_details"
+        android:layout_alignRight="@+id/add_details"
+        android:layout_alignEnd="@+id/add_details"
+        android:id="@+id/add_source"
+        android:hint="Source" />
+
+    <CheckBox
+        android:text="True"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_truth"
+        android:layout_below="@+id/add_source"
+        android:layout_alignLeft="@+id/add_source"
+        android:layout_alignStart="@+id/add_source" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:layout_below="@+id/add_truth"
+        android:layout_alignLeft="@+id/add_truth"
+        android:layout_alignStart="@+id/add_truth"
+        android:id="@+id/add_explanation"
+        android:hint="Explanation" />
+
+    <Button
+        android:text="Submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_submit"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
