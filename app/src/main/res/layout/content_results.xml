@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_results">
 
     <TextView
-        android:text="Finished!"
+        android:text="@string/results_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -29,15 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:id="@+id/results_table_layout">
-        <TableRow
-            android:layout_width="match_parent">
-
-        </TableRow>
-    </TableLayout>
+        android:id="@+id/results_table_layout"></TableLayout>
 
     <TextView
-        android:text="Your Results:"
+        android:text="@string/results_your_results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/results_table_layout"

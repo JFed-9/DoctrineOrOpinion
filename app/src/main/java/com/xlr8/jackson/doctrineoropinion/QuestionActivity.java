@@ -200,7 +200,9 @@ public class QuestionActivity extends AppCompatActivity {
                             break;
                     }
                     quote.setText(currentQuestion.getDetails());
-                } else {
+                }
+                if (availableQuestions.size() == completedQuestions.size() || completedQuestions.size() == 20)
+                {
                     startActivity(new Intent(QuestionActivity.this, ResultsActivity.class));
                 }
 
@@ -274,7 +276,9 @@ public class QuestionActivity extends AppCompatActivity {
                             break;
                     }
                     quote.setText(currentQuestion.getDetails());
-                } else {
+                }
+                if (availableQuestions.size() == completedQuestions.size() || completedQuestions.size() == 20)
+                {
                     startActivity(new Intent(QuestionActivity.this, ResultsActivity.class));
                 }
 

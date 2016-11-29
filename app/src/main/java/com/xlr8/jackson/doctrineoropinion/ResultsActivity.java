@@ -3,8 +3,11 @@ package com.xlr8.jackson.doctrineoropinion;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -66,7 +69,7 @@ public class ResultsActivity extends AppCompatActivity {
         prefs.edit().putString("CompletedQuestions","").apply();
 
     }
-
+    @SuppressWarnings("deprecation")
     private void loadResults() {
         int shortest = completedQuestions.size();
         if (shortest > scores.size())
@@ -76,14 +79,33 @@ public class ResultsActivity extends AppCompatActivity {
         for (int i = 0; i < shortest; i++)
         {
             TableRow newRow = new TableRow(this);
+            if (scores.get(i).equals("Correc") || scores.get(i).equals("Incorrec")) {
+                scores.set(i,scores.get(i) + "t");
+            }
+            if (scores.get(i).equals("Correct"))
+                newRow.setBackgroundColor(Color.parseColor("#22b20c"));
+            else
+                newRow.setBackgroundColor(Color.parseColor("#e52030"));
+            if (i%2==0)
+            {
+                if (scores.get(i).equals("Correct"))
+                    newRow.setBackgroundColor(Color.parseColor("#159102"));
+                else
+                    newRow.setBackgroundColor(Color.parseColor("#ba0716"));
+            }
+            newRow.setLayoutParams(new LinearLayoutCompat.LayoutParams(
+                    LinearLayoutCompat.LayoutParams.FILL_PARENT,
+                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
             newRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-            TextView newText = (TextView)getLayoutInflater().inflate(R.layout.resultstitle, null);
-            TextViewCompat.setTextAppearance(newText,R.style.ResultsQuestionTitle);
+            TextView newText = new TextView(ResultsActivity.this);
+            newText.setPadding(5, 5, 5, 5);
+            newText.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             newText.setText(completedQuestions.elementAt(i));
 
-            TextView newText2 = (TextView)getLayoutInflater().inflate(R.layout.resultsscore, null);
-            TextViewCompat.setTextAppearance(newText,R.style.ResultsQuestionScore);
+            TextView newText2 = new TextView(ResultsActivity.this);
+            newText2.setPadding(5, 5, 5, 5);
+            newText2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             newText2.setText(scores.elementAt(i));
 
             newRow.addView(newText);
@@ -93,6 +115,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
                 && keyCode == KeyEvent.KEYCODE_BACK
