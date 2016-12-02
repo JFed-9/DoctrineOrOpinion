@@ -53,7 +53,7 @@ public class QuestionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         prefs = QuestionActivity.this.getSharedPreferences("QuizData", Context.MODE_PRIVATE);
-
+        prefs.edit().putBoolean("Finished",false).apply();
 //        if (prefs.getString("AvailableQuestions","").equals("")) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.addValueEventListener(retrieveQuotes);

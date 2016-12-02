@@ -25,6 +25,7 @@ public class StartScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
+
         return true;
     }
 
@@ -40,7 +41,7 @@ public class StartScreen extends AppCompatActivity {
                 AlertDialog.Builder secondScreen = new AlertDialog.Builder(StartScreen.this);
                 secondScreen.setTitle("Coming Soon:");
                 secondScreen.setCancelable(false);
-                secondScreen.setMessage("•Sources of doctrine/rumors\n•History of completed quizzes\n•Statistics of past quizzes");
+                secondScreen.setMessage("•Sources of doctrine/rumors in native web browser\n•History of completed quizzes\n•Statistics of past quizzes");
                 secondScreen.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -102,6 +103,16 @@ public class StartScreen extends AppCompatActivity {
                 startActivity(new Intent(StartScreen.this, AddQuestion.class));
             }
         });
+
+        if (prefs.getBoolean("Finished",false))
+        {
+            prefs.edit().putString("AvailableQuestions","").apply();
+            prefs.edit().putString("Score","").apply();
+            prefs.edit().putString("CurrentQuestion","").apply();
+            prefs.edit().putString("AllQuestions","").apply();
+            prefs.edit().putString("CompletedQuestions","").apply();
+        }
+
     }
 
     @Override

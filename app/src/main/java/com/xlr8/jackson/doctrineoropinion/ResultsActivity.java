@@ -14,6 +14,7 @@ import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +40,8 @@ public class ResultsActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
 
-    TableLayout tableLayout;
+    TableLayout content;
+    TableLayout header;
 
     Map<String,Question> allQuestions = new HashMap<>();
 
@@ -56,7 +58,8 @@ public class ResultsActivity extends AppCompatActivity {
 
         prefs = ResultsActivity.this.getSharedPreferences("QuizData", Context.MODE_PRIVATE);
 
-        tableLayout = (TableLayout) findViewById(R.id.results_table_layout);
+        content = (TableLayout) findViewById(R.id.results_table_layout);
+        header = (TableLayout) findViewById(R.id.results_header);
 
         String available,myScores,completed,all;
 
@@ -64,6 +67,7 @@ public class ResultsActivity extends AppCompatActivity {
         myScores = prefs.getString("Score", "");
         completed = prefs.getString("CompletedQuestions","");
         all = prefs.getString("AllQuestions","");
+        prefs.edit().putBoolean("Finished",true).apply();
 //        Toast.makeText(ResultsActivity.this, available + "\n" + myScores, Toast.LENGTH_SHORT).show();
 
         Gson gson = new GsonBuilder().create();
@@ -81,6 +85,7 @@ public class ResultsActivity extends AppCompatActivity {
         loadResults();
 
     }
+
     @SuppressWarnings("deprecation")
     private void loadResults() {
         int shortest = completedQuestions.size();
@@ -88,6 +93,43 @@ public class ResultsActivity extends AppCompatActivity {
             shortest = scores.size();
         if (scores.size() != completedQuestions.size())
             Toast.makeText(ResultsActivity.this,"Error in size of arrays\n" + completedQuestions + "\n" + scores,Toast.LENGTH_SHORT).show();
+
+        TableRow Header = new TableRow(this);
+        Header.setBackgroundColor(Color.parseColor("#aaaaaa"));
+        Header.setLayoutParams(new LinearLayoutCompat.LayoutParams(
+                LinearLayoutCompat.LayoutParams.FILL_PARENT,
+                LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
+        Header.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+        TextView Header1 = new TextView(ResultsActivity.this);
+        Header1.setPadding(15, 10, 15, 10);
+        Header1.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+        Header1.setText("Question");
+        Header1.setGravity(Gravity.CENTER);
+
+        TextView Header2 = new TextView(ResultsActivity.this);
+        Header2.setPadding(15, 10, 15, 10);
+        Header2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+        Header2.setText("Result");
+        Header2.setGravity(Gravity.CENTER);
+
+        TextView Header3 = new TextView(ResultsActivity.this);
+        Header3.setPadding(15, 10, 15, 10);
+        Header3.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+        Header3.setText("Source");
+        Header3.setGravity(Gravity.CENTER);
+
+        View Separator = new View(this);
+        Separator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
+        Separator.setBackgroundColor(Color.parseColor("#ffffff"));
+
+        Header.addView(Header1);
+        Header.addView(Header2);
+        Header.addView(Header3);
+
+        header.addView(Header);
+        header.addView(Separator);
+
         for (int i = 0; i < shortest; i++)
         {
             TableRow newRow = new TableRow(this);
@@ -111,27 +153,22 @@ public class ResultsActivity extends AppCompatActivity {
             newRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             final TextView newText = new TextView(ResultsActivity.this);
-            newText.setPadding(15, 15, 15, 15);
+//            newText.setPadding(15, 15, 15, 15);
+            newText.setPadding(15,15,15,15);
             newText.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             newText.setText(completedQuestions.elementAt(i));
 
-            TextView newText2 = new TextView(ResultsActivity.this);
-            newText2.setPadding(15, 15, 15, 15);
+            final TextView newText2 = new TextView(ResultsActivity.this);
+            newText2.setPadding(15,15,15,15);
             newText2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             newText2.setText(scores.elementAt(i));
+//            newText2.setGravity(Gravity.CENTER);
 
-//            TextView newText3 = new TextView(ResultsActivity.this);
-//            newText3.setPadding(15, 15, 15, 15);
-//            newText3.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-//            newText3.setText("Source");
-//            newText3.setTextColor(Color.parseColor("#2211ff"));
-//            newText3.setTextIsSelectable(true);
-
-            Button newButton = new Button(ResultsActivity.this);
+            final Button newButton = new Button(ResultsActivity.this);
             newButton.setText("Source");
             newButton.setTextColor(Color.parseColor("#2211ff"));
             newButton.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-            newButton.setPadding(15, 15, 15, 15);
+            newButton.setPadding(15,15,15,15);
             newButton.setBackgroundColor(Color.TRANSPARENT);
             newButton.setPaintFlags(newButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -153,17 +190,17 @@ public class ResultsActivity extends AppCompatActivity {
                 }
             });
 
-            View v = new View(this);
-            v.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
-            v.setBackgroundColor(Color.parseColor("#ffffff"));
-
             newRow.addView(newText);
             newRow.addView(newText2);
             newRow.addView(newButton);
 
-            tableLayout.addView(newRow);
+            View sep = new View(this);
+            sep.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
+            sep.setBackgroundColor(Color.parseColor("#ffffff"));
+
+            content.addView(newRow);
             if (i != shortest-1)
-                tableLayout.addView(v);
+                content.addView(sep);
         }
     }
 

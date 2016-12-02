@@ -24,18 +24,23 @@
         <!--android:textStyle="normal|bold"-->
         <!--android:textSize="30sp" />-->
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:id="@+id/results_header">
+
+    </TableLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/results_header"
         android:id="@+id/results_scrollView">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:stretchColumns="0,1"
+            android:stretchColumns="*"
             android:id="@+id/results_table_layout" />
 
     </ScrollView>
