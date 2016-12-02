@@ -13,31 +13,40 @@
     tools:context="com.xlr8.jackson.doctrineoropinion.ResultsActivity"
     tools:showIn="@layout/activity_results">
 
-    <TextView
-        android:text="@string/results_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/results_finished"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:textSize="30sp" />
+    <!--<TextView-->
+        <!--android:text="@string/results_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:id="@+id/results_finished"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textStyle="normal|bold"-->
+        <!--android:textSize="30sp" />-->
 
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:id="@+id/results_table_layout"></TableLayout>
+        android:id="@+id/results_scrollView">
 
-    <TextView
-        android:text="@string/results_your_results"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/results_table_layout"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/results_results"
-        android:textSize="24sp" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:stretchColumns="0,1"
+            android:id="@+id/results_table_layout" />
+
+    </ScrollView>
+
+    <!--<TextView-->
+        <!--android:text="@string/results_your_results"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/results_scrollView"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:id="@+id/results_results"-->
+        <!--android:textSize="24sp" />-->
 
 </RelativeLayout>

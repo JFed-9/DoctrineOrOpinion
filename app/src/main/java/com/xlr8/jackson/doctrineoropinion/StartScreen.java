@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +20,42 @@ public class StartScreen extends AppCompatActivity {
 
     Button addButton;
     SharedPreferences prefs;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    public void DisplayInfo(MenuItem menuItem)
+    {
+        final AlertDialog.Builder firstScreen = new AlertDialog.Builder(StartScreen.this);
+        firstScreen.setTitle("Info");
+        firstScreen.setCancelable(false);
+        firstScreen.setMessage("This app was created as a school project by a student at Brigham Young University. While it is not officially validated by the Church of Jesus Christ of Latter Day Saints, it tries to stay true to its teachings and principles.");
+        firstScreen.setPositiveButton("More...", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                AlertDialog.Builder secondScreen = new AlertDialog.Builder(StartScreen.this);
+                secondScreen.setTitle("Coming Soon:");
+                secondScreen.setCancelable(false);
+                secondScreen.setMessage("•Sources of doctrine/rumors\n•History of completed quizzes\n•Statistics of past quizzes");
+                secondScreen.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                secondScreen.create().show();
+            }
+        }).setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        firstScreen.create().show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -38,6 +38,8 @@ public class QuestionActivity extends AppCompatActivity {
 
     Question currentQuestion = new Question();
 
+    String available,myScores,currentQ,completed;
+
     DatabaseReference mDatabase;
 
     SharedPreferences prefs;
@@ -65,7 +67,7 @@ public class QuestionActivity extends AppCompatActivity {
 
 
 
-        String available,myScores,currentQ,completed;
+
 
         available = prefs.getString("AvailableQuestions", "");
         myScores = prefs.getString("Score", "");
@@ -88,18 +90,20 @@ public class QuestionActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
 //            Toast.makeText(QuestionActivity.this,"Found Questions!", Toast.LENGTH_SHORT).show();
             allQuestions.clear();
-            availableQuestions.clear();
+            if (!available.contains("ß"))
+                availableQuestions.clear();
 
             for (DataSnapshot snap : dataSnapshot.getChildren()) {
                 for (DataSnapshot QuestionSnap : snap.getChildren()) {
                     Question addingQ = (Question)QuestionSnap.getValue(Question.class);
 
                     allQuestions.put(addingQ.getTitle(), addingQ);
-                    availableQuestions.add(addingQ.getTitle());
+                    if (!available.contains("ß"))
+                        availableQuestions.add(addingQ.getTitle());
                 }
             }
-
-            Collections.shuffle(availableQuestions);
+            if (!available.contains("ß"))
+                Collections.shuffle(availableQuestions);
 
             if (quote.getText().equals("Loading..."))
             {

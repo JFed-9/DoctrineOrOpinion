@@ -4,8 +4,8 @@
     <string name="title_activity_question">Doctrine Or Opinion?</string>
     <string name="NoQuestionsFound">No further questions found</string>
     <string name="Loading">Loading...</string>
-    <string name="title_activity_results">Results</string>
+    <string name="title_activity_results">Your Results:</string>
     <string name="title_activity_add_question">Add Question</string>
-    <string name="results_header">Finished!</string>
-    <string name="results_your_results">Your Results:</string>
+    <!--<string name="results_header">Finished!</string>-->
+    <!--<string name="results_your_results">Your Results:</string>-->
 </resources>
