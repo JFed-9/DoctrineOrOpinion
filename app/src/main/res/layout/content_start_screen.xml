@@ -22,7 +22,7 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="Doctrine or Opinion?"
+        android:text="@string/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/start_title"
@@ -31,7 +31,7 @@
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Add Question"
+        android:text="@string/add_question_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

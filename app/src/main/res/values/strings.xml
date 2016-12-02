@@ -6,6 +6,8 @@
     <string name="Loading">Loading...</string>
     <string name="title_activity_results">Your Results:</string>
     <string name="title_activity_add_question">Add Question</string>
+    <string name="add_question_button">Add Your Own Question!</string>
+    <string name="title">Doctrine or Opinion?</string>
     <!--<string name="results_header">Finished!</string>-->
     <!--<string name="results_your_results">Your Results:</string>-->
 </resources>

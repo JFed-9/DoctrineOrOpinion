@@ -13,21 +13,24 @@ public class Question {
     String details,title;
     Boolean isTrue;
     String source;
-    double explanation;
+    Boolean approved;
+    Integer id;
 
-    Question(String t, String q, Boolean d, String s, double r) {
+    Question(int i, String t, String q, Boolean d, String s, Boolean a) {
+        id = i;
         details = q;
         title = t;
         isTrue = d;
         source = s;
-        explanation = r;
+        approved = a;
     }
     Question() {
+        id = 0;
         details = "Blank";
         title = "Blank";
         isTrue = true;
         source = "http://google.com";
-        explanation = 0.0;
+        approved = false;
     }
     Question(String rawData) {
         int count = 0;
@@ -38,22 +41,26 @@ public class Question {
                 count++;
             }
         }
-        if (count != 5)
+        if (count != 6)
         {
+            id = 0;
             details = "Blank";
             title = "Blank";
             isTrue = true;
             source = "http://google.com";
-            explanation = 0.0;
+            approved = false;
         } else {
             String[] values = rawData.split("ß");
-            title = values[0];
-            details = values[1];
+            id = Integer.parseInt(values[0]);
+            title = values[1];
+            details = values[2];
             isTrue = false;
-            if (values[2].equals("T"))
+            if (values[3].equals("T"))
                 isTrue = true;
-            source = values[3];
-            explanation = Double.parseDouble(values[4]);
+            source = values[4];
+            approved = false;
+            if (values[5].equals("T"))
+                approved = true;
         }
     }
 
@@ -61,32 +68,39 @@ public class Question {
     String getTitle() { return title; }
     Boolean isTrue() { return isTrue; }
     String getSource() { return source; }
-    double getExplanation() { return explanation; }
+    Boolean getApproved() { return approved; }
+    int getId() { return id; }
 
     public void setDetails(String q) { details = q; }
     public void setTitle(String t) { title = t; }
     public void setTrue(Boolean i) { isTrue = i; }
     public void setSource(String s) { source = s; }
-    public void setExplanation(Double r) { explanation = r; }
+    public void setApproved(Boolean a) { approved = a; }
+    public void setId(int i) { id = i; }
 
     public String toString() {
-        String s = title + "ß" + details + "ß";
+        String s = id + "ß" + title + "ß" + details + "ß";
         if (isTrue)
             s += "T";
         else
             s += "F";
         s += "ß";
-        s += source + "ß" + Double.toString(explanation);
+        s += source + "ß";
+        if (approved)
+            s += "T";
+        else
+            s += "F";
         return s;
     }
 
     public HashMap toHashMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
         map.put("details", details);
         map.put("title", title);
         map.put("isTrue", isTrue);
         map.put("source", source);
-        map.put("explanation", explanation);
+        map.put("approved", approved);
         return map;
     }
 }

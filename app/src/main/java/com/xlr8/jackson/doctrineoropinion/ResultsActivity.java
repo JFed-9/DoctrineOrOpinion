@@ -43,10 +43,12 @@ public class ResultsActivity extends AppCompatActivity {
     TableLayout content;
     TableLayout header;
 
-    Map<String,Question> allQuestions = new HashMap<>();
+    Map<Integer,Question> allQuestions = new HashMap<>();
 
-    Vector<String> availableQuestions = new Vector<>();
-    Vector<String> completedQuestions = new Vector<>();
+    Vector<Integer> availableQuestions = new Vector<>();
+    Vector<Integer> completedQuestions = new Vector<>();
+    Vector<String> availableQs = new Vector<>();
+    Vector<String> completedQs = new Vector<>();
     Vector<String> scores = new Vector<>();
 
     @Override
@@ -71,17 +73,22 @@ public class ResultsActivity extends AppCompatActivity {
 //        Toast.makeText(ResultsActivity.this, available + "\n" + myScores, Toast.LENGTH_SHORT).show();
 
         Gson gson = new GsonBuilder().create();
-        Type type = new TypeToken<Map<String, Question>>(){}.getType();
+        Type type = new TypeToken<Map<Integer, Question>>(){}.getType();
         allQuestions = gson.fromJson(all,type);
 
 //        Toast.makeText(ResultsActivity.this,all,Toast.LENGTH_SHORT).show();
 //        Toast.makeText(ResultsActivity.this,allQuestions.toString(),Toast.LENGTH_SHORT).show();
-        Collections.addAll(availableQuestions,available.split("ß"));
+        Collections.addAll(availableQs,available.split("ß"));
+        for (String s : availableQs) {
+            availableQuestions.add(Integer.parseInt(s));
+        }
         if (myScores.charAt(0) == 'ß')
             myScores = myScores.substring(1);
         Collections.addAll(scores,myScores.split("ß"));
-        Collections.addAll(completedQuestions,completed.split("ß"));
-
+        Collections.addAll(completedQs,completed.split("ß"));
+        for (String s : completedQs) {
+            completedQuestions.add(Integer.parseInt(s));
+        }
         loadResults();
 
     }
@@ -133,30 +140,25 @@ public class ResultsActivity extends AppCompatActivity {
         for (int i = 0; i < shortest; i++)
         {
             TableRow newRow = new TableRow(this);
-            if (scores.get(i).equals("Correc") || scores.get(i).equals("Incorrec")) {
-                scores.set(i,scores.get(i) + "t");  // I have no idea why this happens, but it does, so I have to use this patch.
-            }
+//            if (scores.get(i).equals("Correc") || scores.get(i).equals("Incorrec")) {
+//                scores.set(i,scores.get(i) + "t");  // I have no idea why this happens, but it does, so I have to use this patch.
+//            }
             if (scores.get(i).equals("Correct"))
                 newRow.setBackgroundColor(Color.parseColor("#22b20c"));
             else
                 newRow.setBackgroundColor(Color.parseColor("#e52030"));
-//            if (i%2==0)
-//            {
-//                if (scores.get(i).equals("Correct"))
-//                    newRow.setBackgroundColor(Color.parseColor("#159102"));
-//                else
-//                    newRow.setBackgroundColor(Color.parseColor("#ba0716"));
-//            }
             newRow.setLayoutParams(new LinearLayoutCompat.LayoutParams(
                     LinearLayoutCompat.LayoutParams.FILL_PARENT,
                     LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
             newRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
+            final Integer currentQ = completedQuestions.elementAt(i);
+
             final TextView newText = new TextView(ResultsActivity.this);
 //            newText.setPadding(15, 15, 15, 15);
             newText.setPadding(15,15,15,15);
             newText.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-            newText.setText(completedQuestions.elementAt(i));
+            newText.setText(allQuestions.get(currentQ).getTitle());
 
             final TextView newText2 = new TextView(ResultsActivity.this);
             newText2.setPadding(15,15,15,15);
@@ -176,7 +178,8 @@ public class ResultsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     String url;
-                    url = allQuestions.get((String) newText.getText()).getSource();
+
+                    url = allQuestions.get(currentQ).getSource();
 //                    Toast.makeText(ResultsActivity.this,url,Toast.LENGTH_SHORT).show();
                     try {
                         URL myurl = new URL(url);
@@ -223,6 +226,7 @@ public class ResultsActivity extends AppCompatActivity {
         prefs.edit().putString("CurrentQuestion","").apply();
         prefs.edit().putString("AllQuestions","").apply();
         prefs.edit().putString("CompletedQuestions","").apply();
+        prefs.edit().putBoolean("Finished",false).apply();
         startActivity(new Intent(ResultsActivity.this, StartScreen.class));
     }
 

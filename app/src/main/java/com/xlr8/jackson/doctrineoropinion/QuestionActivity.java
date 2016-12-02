@@ -1,5 +1,6 @@
 package com.xlr8.jackson.doctrineoropinion;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,10 +31,12 @@ public class QuestionActivity extends AppCompatActivity {
     Button doctrine_button, opinion_button;
     TextView quote;
 
-    Map<String,Question> allQuestions = new HashMap<>();
+    Map<Integer,Question> allQuestions = new HashMap<>();
 
-    Vector<String> availableQuestions = new Vector<>();
-    Vector<String> completedQuestions = new Vector<>();
+    Vector<Integer> availableQuestions = new Vector<>();
+    Vector<String> availableQs = new Vector<>();
+    Vector<Integer> completedQuestions = new Vector<>();
+    Vector<String> completedQs = new Vector<>();
     Vector<String> scores = new Vector<>();
 
     Question currentQuestion = new Question();
@@ -56,7 +59,7 @@ public class QuestionActivity extends AppCompatActivity {
         prefs.edit().putBoolean("Finished",false).apply();
 //        if (prefs.getString("AvailableQuestions","").equals("")) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.addValueEventListener(retrieveQuotes);
+            mDatabase.addValueEventListener(getQuestions);
 //        }
 
         doctrine_button = (Button)   findViewById(R.id.question_button_doctrine);
@@ -76,16 +79,24 @@ public class QuestionActivity extends AppCompatActivity {
 
 
 
-        if (available.contains("ß"))
-            Collections.addAll(availableQuestions,available.split("ß"));
+        if (available.contains("ß")) {
+            Collections.addAll(availableQs, available.split("ß"));
+            for (String s : availableQs) {
+                availableQuestions.add(Integer.parseInt(s));
+            }
+        }
         if (myScores.contains("ß"))
             Collections.addAll(scores,myScores.split("ß"));
-        if (completed.contains("ß"))
-            Collections.addAll(completedQuestions,completed.split("ß"));
+        if (completed.contains("ß")) {
+            Collections.addAll(completedQs,completed.split("ß"));
+            for (String s : completedQs) {
+                completedQuestions.add(Integer.parseInt(s));
+            }
+        }
         currentQuestion = new Question(currentQ);
     }
 
-    ValueEventListener retrieveQuotes = new ValueEventListener() {
+    ValueEventListener getQuestions = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
 //            Toast.makeText(QuestionActivity.this,"Found Questions!", Toast.LENGTH_SHORT).show();
@@ -97,9 +108,9 @@ public class QuestionActivity extends AppCompatActivity {
                 for (DataSnapshot QuestionSnap : snap.getChildren()) {
                     Question addingQ = (Question)QuestionSnap.getValue(Question.class);
 
-                    allQuestions.put(addingQ.getTitle(), addingQ);
-                    if (!available.contains("ß"))
-                        availableQuestions.add(addingQ.getTitle());
+                    allQuestions.put(addingQ.getId(), addingQ);
+                    if (!available.contains("ß") && addingQ.getApproved())
+                        availableQuestions.add(addingQ.getId());
                 }
             }
             if (!available.contains("ß"))
@@ -109,10 +120,10 @@ public class QuestionActivity extends AppCompatActivity {
             {
                 if (availableQuestions.size() > completedQuestions.size())
                 {
-                    for (String s : availableQuestions)
+                    for (Integer i : availableQuestions)
                     {
-                        currentQuestion = allQuestions.get(s);
-                        if (!completedQuestions.contains(currentQuestion.getTitle()))
+                        currentQuestion = allQuestions.get(i);
+                        if (!completedQuestions.contains(currentQuestion.getId()))
                             break;
                     }
                     quote.setText(currentQuestion.getDetails());
@@ -146,25 +157,25 @@ public class QuestionActivity extends AppCompatActivity {
                     scores.add("Incorrect");
 //                    Toast.makeText(QuestionActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
                 }
-                completedQuestions.add(currentQuestion.getTitle());
+                completedQuestions.add(currentQuestion.getId());
 
                 quote.setText(R.string.Loading);
 
                 Gson gson = new Gson();
 
                 String available = "";
-                for (String s : availableQuestions)
+                for (Integer i : availableQuestions)
                 {
-                    available += s;
+                    available += i;
                     available += "ß";
                 }
 
                 available = available.substring(0,available.length()-1);
 
                 String completed = "";
-                for (String s : completedQuestions)
+                for (Integer i : completedQuestions)
                 {
-                    completed += s;
+                    completed += i;
                     completed += "ß";
                 }
 
@@ -178,15 +189,6 @@ public class QuestionActivity extends AppCompatActivity {
                 }
                 myScores = myScores.substring(0,myScores.length()-1);
 
-                String allQs = "";
-                for (String s : availableQuestions)
-                {
-                    Question q = allQuestions.get(s);
-                    allQs += q.toString();
-                    allQs += "ß";
-                }
-                myScores = myScores.substring(0,myScores.length()-1);
-
 //                Toast.makeText(QuestionActivity.this, myScores, Toast.LENGTH_SHORT).show();
 
                 prefs.edit().putString("AvailableQuestions", available).apply();
@@ -195,21 +197,20 @@ public class QuestionActivity extends AppCompatActivity {
                 prefs.edit().putString("CompletedQuestions", completed).apply();
                 prefs.edit().putString("Score", myScores).apply();
 
-                if (availableQuestions.size() != completedQuestions.size())
+                if (availableQuestions.size() == completedQuestions.size() || completedQuestions.size() == 10)
                 {
-                    for (String s : availableQuestions)
+                    startActivity(new Intent(QuestionActivity.this, ResultsActivity.class));
+                }
+                if (availableQuestions.size() != completedQuestions.size() && completedQuestions.size() != 10)
+                {
+                    for (Integer i : availableQuestions)
                     {
-                        currentQuestion = allQuestions.get(s);
-                        if (!completedQuestions.contains(currentQuestion.getTitle()))
+                        currentQuestion = allQuestions.get(i);
+                        if (!completedQuestions.contains(currentQuestion.getId()))
                             break;
                     }
                     quote.setText(currentQuestion.getDetails());
                 }
-                if (availableQuestions.size() == completedQuestions.size() || completedQuestions.size() == 20)
-                {
-                    startActivity(new Intent(QuestionActivity.this, ResultsActivity.class));
-                }
-
             }
         }
     };
@@ -232,25 +233,25 @@ public class QuestionActivity extends AppCompatActivity {
                     scores.add("Incorrect");
 //                    Toast.makeText(QuestionActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
                 }
-                completedQuestions.add(currentQuestion.getTitle());
+                completedQuestions.add(currentQuestion.getId());
 
                 quote.setText(R.string.Loading);
 
                 Gson gson = new Gson();
 
                 String available = "";
-                for (String s : availableQuestions)
+                for (Integer i : availableQuestions)
                 {
-                    available += s;
+                    available += i;
                     available += "ß";
                 }
 
                 available = available.substring(0,available.length()-1);
 
                 String completed = "";
-                for (String s : completedQuestions)
+                for (Integer i : completedQuestions)
                 {
-                    completed += s;
+                    completed += i;
                     completed += "ß";
                 }
 
@@ -271,21 +272,20 @@ public class QuestionActivity extends AppCompatActivity {
                 prefs.edit().putString("CompletedQuestions", completed).apply();
                 prefs.edit().putString("Score", myScores).apply();
 
-                if (availableQuestions.size() != completedQuestions.size())
+                if (availableQuestions.size() == completedQuestions.size() || completedQuestions.size() == 10)
                 {
-                    for (String s : availableQuestions)
+                    startActivity(new Intent(QuestionActivity.this, ResultsActivity.class));
+                }
+                if (availableQuestions.size() != completedQuestions.size() && completedQuestions.size() != 10)
+                {
+                    for (Integer i : availableQuestions)
                     {
-                        currentQuestion = allQuestions.get(s);
-                        if (!completedQuestions.contains(currentQuestion.getTitle()))
+                        currentQuestion = allQuestions.get(i);
+                        if (!completedQuestions.contains(currentQuestion.getId()))
                             break;
                     }
                     quote.setText(currentQuestion.getDetails());
                 }
-                if (availableQuestions.size() == completedQuestions.size() || completedQuestions.size() == 20)
-                {
-                    startActivity(new Intent(QuestionActivity.this, ResultsActivity.class));
-                }
-
             }
         }
     };
