@@ -1,8 +1,10 @@
 package com.xlr8.jackson.doctrineoropinion;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -32,9 +34,6 @@ public class AddQuestion extends AppCompatActivity {
     Map<Integer,Question> allQuestions = new HashMap<>();
 
     Vector<Integer> availableQuestions = new Vector<>();
-    Vector<Integer> completedQuestions = new Vector<>();
-
-    String available;
 
     EditText title,details,source;
     CheckBox truth;
@@ -75,7 +74,17 @@ public class AddQuestion extends AppCompatActivity {
                     mDatabase.child("Quotes").push().setValue(questionToAdd.toHashMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(AddQuestion.this,"Success!",Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AddQuestion.this);
+                            builder.setTitle("Question Added Successfully!");
+                            builder.setMessage("Please wait at least 48 hours for your question to be approved.")
+                                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .setCancelable(false);
+                            AlertDialog alert = builder.create();
+                            alert.show();
                         }
                     });
                     title.setText("");

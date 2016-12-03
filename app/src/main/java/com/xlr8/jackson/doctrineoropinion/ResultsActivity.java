@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -35,6 +36,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+
+import static android.R.attr.button;
 
 public class ResultsActivity extends AppCompatActivity {
 
@@ -115,16 +118,16 @@ public class ResultsActivity extends AppCompatActivity {
         Header1.setGravity(Gravity.CENTER);
 
         TextView Header2 = new TextView(ResultsActivity.this);
-        Header2.setPadding(15, 10, 15, 10);
+        Header2.setPadding(15, 10, 0, 10);
         Header2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
         Header2.setText("Result");
-        Header2.setGravity(Gravity.CENTER);
+        Header2.setGravity(Gravity.RIGHT);
 
         TextView Header3 = new TextView(ResultsActivity.this);
-        Header3.setPadding(15, 10, 15, 10);
+        Header3.setPadding(0, 10, 15, 10);
         Header3.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
         Header3.setText("Source");
-        Header3.setGravity(Gravity.CENTER);
+        Header3.setGravity(Gravity.RIGHT);
 
         View Separator = new View(this);
         Separator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
@@ -155,24 +158,25 @@ public class ResultsActivity extends AppCompatActivity {
             final Integer currentQ = completedQuestions.elementAt(i);
 
             final TextView newText = new TextView(ResultsActivity.this);
-//            newText.setPadding(15, 15, 15, 15);
             newText.setPadding(15,15,15,15);
             newText.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             newText.setText(allQuestions.get(currentQ).getTitle());
+            newText.setGravity(Gravity.LEFT);
 
             final TextView newText2 = new TextView(ResultsActivity.this);
-            newText2.setPadding(15,15,15,15);
+            newText2.setPadding(15,15,0,15);
             newText2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             newText2.setText(scores.elementAt(i));
-//            newText2.setGravity(Gravity.CENTER);
+            newText2.setGravity(Gravity.RIGHT);
 
             final Button newButton = new Button(ResultsActivity.this);
             newButton.setText("Source");
             newButton.setTextColor(Color.parseColor("#2211ff"));
             newButton.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-            newButton.setPadding(15,15,15,15);
+            newButton.setPadding(0,15,15,15);
             newButton.setBackgroundColor(Color.TRANSPARENT);
             newButton.setPaintFlags(newButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            newButton.setGravity(Gravity.RIGHT);
 
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override

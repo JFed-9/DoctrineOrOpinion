@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:ems="10"
         android:layout_below="@+id/add_addlabel"
         android:layout_centerHorizontal="true"
@@ -34,7 +34,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences"
         android:ems="10"
         android:layout_below="@+id/add_title"
         android:layout_alignRight="@+id/add_title"
@@ -45,7 +45,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textUri"
         android:ems="10"
         android:layout_below="@+id/add_details"
         android:layout_alignRight="@+id/add_details"
@@ -61,17 +61,6 @@
         android:layout_below="@+id/add_source"
         android:layout_alignLeft="@+id/add_source"
         android:layout_alignStart="@+id/add_source" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:layout_below="@+id/add_truth"
-        android:layout_alignLeft="@+id/add_truth"
-        android:layout_alignStart="@+id/add_truth"
-        android:id="@+id/add_explanation"
-        android:hint="Explanation" />
 
     <Button
         android:text="Submit"
